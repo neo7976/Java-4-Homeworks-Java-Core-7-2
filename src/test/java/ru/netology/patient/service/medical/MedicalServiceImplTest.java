@@ -20,7 +20,30 @@ import java.time.LocalDate;
 import java.util.stream.Stream;
 
 class MedicalServiceImplTest {
-    MedicalServiceImpl medicalService;
+    private MedicalServiceImpl medicalService;
+    private PatientInfoRepository patientInfoRepository;
+    private SendAlertService alertService;
+
+    @BeforeEach
+    void setUp() {
+        System.out.println("Начало теста: ");
+        patientInfoRepository = Mockito.mock(PatientInfoRepository.class);
+        Mockito.when(patientInfoRepository.getById(Mockito.any()))
+                .thenReturn(new PatientInfo("Иван", "Петров", LocalDate.of(1980, 11, 26),
+                        new HealthInfo(new BigDecimal("36.65"), new BloodPressure(120, 80))));
+
+        alertService = Mockito.mock(SendAlertService.class);
+
+        medicalService = new MedicalServiceImpl(patientInfoRepository, alertService);
+    }
+
+    @AfterEach
+    void tearDown() {
+        System.out.println("\nОкончание теста: ");
+        medicalService = null;
+        patientInfoRepository = null;
+        alertService = null;
+    }
 
     public static Stream<Arguments> sourceBloodPressure() {
         return Stream.of(Arguments.of(new BloodPressure(100, 70)),
@@ -31,31 +54,13 @@ class MedicalServiceImplTest {
                 Arguments.of(new BloodPressure(120, 90)));
     }
 
-    @BeforeEach
-    void setUp() {
-        System.out.println("Начало теста: ");
-    }
-
-    @AfterEach
-    void tearDown() {
-        System.out.println("\nОкончание теста: ");
-        medicalService = null;
-    }
-
     @ParameterizedTest
     @MethodSource("sourceBloodPressure")
     void checkBloodPressure(BloodPressure currentPressure) {
-        PatientInfoRepository patientInfoRepository = Mockito.mock(PatientInfoRepository.class);
-        Mockito.when(patientInfoRepository.getById(Mockito.any()))
-                .thenReturn(new PatientInfo("Иван", "Петров", LocalDate.of(1980, 11, 26),
-                        new HealthInfo(new BigDecimal("36.65"), new BloodPressure(120, 80))));
 
-
-        SendAlertService alertService = Mockito.mock(SendAlertService.class);
         String message = "Warning, patient with id: null, need help";
         ArgumentCaptor<String> argumentCaptor = ArgumentCaptor.forClass(String.class);
 
-        medicalService = new MedicalServiceImpl(patientInfoRepository, alertService);
         medicalService.checkBloodPressure("id"
                 , currentPressure);
         Mockito.verify(alertService).send(argumentCaptor.capture());
@@ -64,17 +69,8 @@ class MedicalServiceImplTest {
 
     @Test
     void checkTemperature() {
-        PatientInfoRepository patientInfoRepository = Mockito.mock(PatientInfoRepository.class);
-        Mockito.when(patientInfoRepository.getById(Mockito.any()))
-                .thenReturn(new PatientInfo("Иван", "Петров", LocalDate.of(1980, 11, 26),
-                        new HealthInfo(new BigDecimal("36.65"), new BloodPressure(120, 80))));
-
-
-        SendAlertService alertService = Mockito.mock(SendAlertService.class);
         String message = "Warning, patient with id: null, need help";
         ArgumentCaptor<String> argumentCaptor = ArgumentCaptor.forClass(String.class);
-
-        medicalService = new MedicalServiceImpl(patientInfoRepository, alertService);
 
         BigDecimal currentTemperature = new BigDecimal("35.14");
 
@@ -86,17 +82,8 @@ class MedicalServiceImplTest {
 
     @Test
     void checkBloodPressure_send_message() {
-        PatientInfoRepository patientInfoRepository = Mockito.mock(PatientInfoRepository.class);
-        Mockito.when(patientInfoRepository.getById(Mockito.any()))
-                .thenReturn(new PatientInfo("Иван", "Петров", LocalDate.of(1980, 11, 26),
-                        new HealthInfo(new BigDecimal("36.65"), new BloodPressure(120, 80))));
-
-
-        SendAlertService alertService = Mockito.mock(SendAlertService.class);
-
         ArgumentCaptor<String> argumentCaptor = ArgumentCaptor.forClass(String.class);
 
-        medicalService = new MedicalServiceImpl(patientInfoRepository, alertService);
         BloodPressure currentPressure = new BloodPressure(120, 80);
         medicalService.checkBloodPressure("id"
                 , currentPressure);
@@ -106,17 +93,7 @@ class MedicalServiceImplTest {
 
     @Test
     void checkTemperature_send_message() {
-        PatientInfoRepository patientInfoRepository = Mockito.mock(PatientInfoRepository.class);
-        Mockito.when(patientInfoRepository.getById(Mockito.any()))
-                .thenReturn(new PatientInfo("Иван", "Петров", LocalDate.of(1980, 11, 26),
-                        new HealthInfo(new BigDecimal("36.65"), new BloodPressure(120, 80))));
-
-
-        SendAlertService alertService = Mockito.mock(SendAlertService.class);
-
         ArgumentCaptor<String> argumentCaptor = ArgumentCaptor.forClass(String.class);
-
-        medicalService = new MedicalServiceImpl(patientInfoRepository, alertService);
 
         BigDecimal currentTemperature = new BigDecimal("35.15");
 
