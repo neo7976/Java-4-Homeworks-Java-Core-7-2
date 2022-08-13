@@ -56,6 +56,24 @@ class MedicalServiceImplTest {
 
     @Test
     void checkTemperature() {
+        PatientInfoRepository patientInfoRepository = Mockito.mock(PatientInfoRepository.class);
+        Mockito.when(patientInfoRepository.getById(Mockito.any()))
+                .thenReturn(new PatientInfo("Иван", "Петров", LocalDate.of(1980, 11, 26),
+                        new HealthInfo(new BigDecimal("36.65"), new BloodPressure(120, 80))));
+
+
+        SendAlertService alertService = Mockito.mock(SendAlertService.class);
+        String message = "Warning, patient with id: null1, need help";
+        ArgumentCaptor<String> argumentCaptor = ArgumentCaptor.forClass(String.class);
+
+        medicalService = new MedicalServiceImpl(patientInfoRepository, alertService);
+
+        BigDecimal currentTemperature = new BigDecimal("38.16");
+
+        medicalService.checkTemperature("id"
+                , currentTemperature);
+        Mockito.verify(alertService).send(argumentCaptor.capture());
+        Assertions.assertEquals(message, argumentCaptor.getValue());
     }
 
     @Test
