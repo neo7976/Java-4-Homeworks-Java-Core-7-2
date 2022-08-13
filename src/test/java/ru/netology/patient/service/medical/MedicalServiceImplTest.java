@@ -63,12 +63,12 @@ class MedicalServiceImplTest {
 
 
         SendAlertService alertService = Mockito.mock(SendAlertService.class);
-        String message = "Warning, patient with id: null1, need help";
+        String message = "Warning, patient with id: null, need help";
         ArgumentCaptor<String> argumentCaptor = ArgumentCaptor.forClass(String.class);
 
         medicalService = new MedicalServiceImpl(patientInfoRepository, alertService);
 
-        BigDecimal currentTemperature = new BigDecimal("38.16");
+        BigDecimal currentTemperature = new BigDecimal("35.14");
 
         medicalService.checkTemperature("id"
                 , currentTemperature);
