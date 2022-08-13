@@ -68,17 +68,15 @@ class MedicalServiceImplTest {
 
         SendAlertService alertService = Mockito.mock(SendAlertService.class);
         String message = "Warning, patient with id: null, need help";
-
         ArgumentCaptor<String> argumentCaptor = ArgumentCaptor.forClass(String.class);
+
         medicalService = new MedicalServiceImpl(patientInfoRepository, alertService);
         BloodPressure currentPressure = new BloodPressure(120, 80);
         medicalService.checkBloodPressure("id"
                 , currentPressure);
+        Mockito.verify(alertService).send(argumentCaptor.capture());
+        Assertions.assertEquals(message, argumentCaptor.getValue());
 
-
-
-//        Mockito.verify(alertService).send(argumentCaptor.capture());
-//        Assertions.assertEquals(message, argumentCaptor.getValue());
 //        Mockito.verify(alertService,Mockito.times(0)).send(argumentCaptor.capture());
 //        Assertions.assertEquals(message, argumentCaptor.getValue());
 //
