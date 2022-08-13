@@ -30,7 +30,8 @@ public class MedicalServiceImpl implements MedicalService {
     @Override
     public void checkTemperature(String patientId, BigDecimal temperature) {
         PatientInfo patientInfo = getPatientInfo(patientId);
-        if (patientInfo.getHealthInfo().getNormalTemperature().subtract(new BigDecimal("1.5")).compareTo(temperature) > 0) {
+        if (patientInfo.getHealthInfo().getNormalTemperature().subtract(new BigDecimal("1.5")).compareTo(temperature) > 0
+                || (new BigDecimal("1.5")).add(patientInfo.getHealthInfo().getNormalTemperature()).compareTo(temperature) < 0) {
             String message = String.format("Warning, patient with id: %s, need help", patientInfo.getId());
 //            System.out.println(message);
             alertService.send(message);

@@ -71,7 +71,7 @@ class MedicalServiceImplTest {
         return Stream.of(Arguments.of(new BigDecimal("35.14"))
                 , Arguments.of(new BigDecimal("35"))
                 , Arguments.of(new BigDecimal("34"))
-//                , Arguments.of(new BigDecimal("39"))
+                , Arguments.of(new BigDecimal("39"))
         );
     }
 
