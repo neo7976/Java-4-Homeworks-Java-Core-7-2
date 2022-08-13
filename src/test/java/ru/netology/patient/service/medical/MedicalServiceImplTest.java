@@ -67,12 +67,19 @@ class MedicalServiceImplTest {
         Assertions.assertEquals(message, argumentCaptor.getValue());
     }
 
-    @Test
-    void checkTemperature() {
+    public static Stream<Arguments> sourceTemperature() {
+        return Stream.of(Arguments.of(new BigDecimal("35.14"))
+                , Arguments.of(new BigDecimal("35"))
+                , Arguments.of(new BigDecimal("34"))
+//                , Arguments.of(new BigDecimal("39"))
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("sourceTemperature")
+    void checkTemperature(BigDecimal currentTemperature) {
         String message = "Warning, patient with id: null, need help";
         ArgumentCaptor<String> argumentCaptor = ArgumentCaptor.forClass(String.class);
-
-        BigDecimal currentTemperature = new BigDecimal("35.14");
 
         medicalService.checkTemperature("id"
                 , currentTemperature);
