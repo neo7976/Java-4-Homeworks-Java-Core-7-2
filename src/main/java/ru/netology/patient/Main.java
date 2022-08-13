@@ -41,11 +41,11 @@ public class Main {
         SendAlertService alertService = new SendAlertServiceImpl();
         MedicalService medicalService = new MedicalServiceImpl(patientInfoRepository, alertService);
 
-        //run service
-        BloodPressure currentPressure = new BloodPressure(60, 120);
-        medicalService.checkBloodPressure(id1, currentPressure);
+//        run service
+//        BloodPressure currentPressure = new BloodPressure(60, 120);
+//        medicalService.checkBloodPressure(id1, currentPressure);
 
-        BigDecimal currentTemperature = new BigDecimal("37.9");
+        BigDecimal currentTemperature = new BigDecimal("0");
         medicalService.checkTemperature(id1, currentTemperature);
     }
 }
