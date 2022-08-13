@@ -27,6 +27,9 @@ class MedicalServiceImplTest {
     @Test
     void checkBloodPressure() {
         PatientInfoRepository patientInfoRepository = Mockito.mock(PatientInfoRepository.class);
+        Mockito.when(patientInfoRepository.getById(Mockito.any()))
+                .thenReturn()
+
 
         SendAlertService alertService = Mockito.mock(SendAlertService.class);
 
