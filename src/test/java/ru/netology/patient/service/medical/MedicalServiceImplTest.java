@@ -92,7 +92,7 @@ class MedicalServiceImplTest {
         BloodPressure currentPressure = new BloodPressure(120, 80);
         medicalService.checkBloodPressure("id"
                 , currentPressure);
-        Mockito.verify(alertService,Mockito.times(0)).send(argumentCaptor.capture());
+        Mockito.verify(alertService,Mockito.never()).send(argumentCaptor.capture());
 
     }
 }
