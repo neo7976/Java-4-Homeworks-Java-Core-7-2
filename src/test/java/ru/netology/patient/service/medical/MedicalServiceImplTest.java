@@ -47,7 +47,7 @@ class MedicalServiceImplTest {
         ArgumentCaptor<String> argumentCaptor = ArgumentCaptor.forClass(String.class);
 
         medicalService = new MedicalServiceImpl(patientInfoRepository, alertService);
-        BloodPressure currentPressure = new BloodPressure(125, 78);
+        BloodPressure currentPressure = new BloodPressure(60, 120);
         medicalService.checkBloodPressure("id"
                 , currentPressure);
         Mockito.verify(alertService).send(argumentCaptor.capture());
